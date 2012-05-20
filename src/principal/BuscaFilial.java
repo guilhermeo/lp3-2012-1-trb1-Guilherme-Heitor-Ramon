@@ -197,8 +197,9 @@ public class BuscaFilial extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
         DefaultTableModel modelo = (DefaultTableModel)tabela.getModel();
+        modelo.getDataVector().removeAllElements();
         
         List<Estoque> estoque = new ArrayList<>();
         
@@ -223,7 +224,10 @@ public class BuscaFilial extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnDesativarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesativarActionPerformed
+
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+                
+        
         int qtdeFilial = 0;
         
         String filial = modelo.getValueAt(tabela.getSelectedRow(), 0).toString();
@@ -233,24 +237,28 @@ public class BuscaFilial extends javax.swing.JFrame {
         int divisao = 0;
         try {
             qtdeFilial = DAO.countFilial(produto);
-            try {
+            
+            if((qtdeFilial-1)==0){
+                
+            }
+            else{
                 divisao = qtde / (qtdeFilial - 1);
                 
                 List<Estoque> estoque = new ArrayList<>();
                 
-                estoque = DAO.listarF(filial);
+                try {
+                    estoque = DAO.listarP(produto);
+                } catch (Exception ex) {
+                    Logger.getLogger(BuscaFilial.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
                 for(int i = 0; i < estoque.size(); i++){
                     if(estoque.get(i).getFilial().equals(filial)){
-                        
+                        DAO.desativarFilial(filial);
+                    } else{
+                        String novaF = estoque.get(i).getFilial();
+                        DAO.distribuirEstoque(novaF, produto, qtde);
                     }
-                    String novaF = estoque.get(i).getFilial();
-                    DAO.distribuirEstoque(novaF, produto, qtde);
-                }
-                
-            }catch (Exception ex){
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-                if(divisao == 0){
-                    JOptionPane.showMessageDialog(null, "Filial desativada, porém não foi possível distribuir o estoque","Exclusão",JOptionPane.WARNING_MESSAGE);
                 }
             }
             
@@ -260,7 +268,10 @@ public class BuscaFilial extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDesativarActionPerformed
 
     private void btnListAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListAllActionPerformed
+        
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+        modelo.getDataVector().removeAllElements();
+        
         List<Estoque> estoque = new ArrayList<>();
         try {
             estoque = DAO.listAll();
@@ -270,7 +281,6 @@ public class BuscaFilial extends javax.swing.JFrame {
                     estoque.get(i).getProduto(), estoque.get(i).getQtd()
                 });
             }
-            
         } catch (Exception ex) {
             Logger.getLogger(BuscaFilial.class.getName()).log(Level.SEVERE, null, ex);
         }

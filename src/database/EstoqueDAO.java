@@ -18,7 +18,7 @@ public class EstoqueDAO {
     private final PreparedStatement operacaoCreate;
 //    private final PreparedStatement operacaoAtualizar;
     private final PreparedStatement operacaoBuscaF;
-//    private final PreparedStatement operacaoBuscaP;
+    private final PreparedStatement operacaoBuscaP;
     private final PreparedStatement operacaoListar;
     private final PreparedStatement operacaoExcluirFilial;
     private final PreparedStatement operacaoCountFilial;
@@ -32,7 +32,7 @@ public class EstoqueDAO {
         operacaoCreate = conexao.prepareStatement("INSERT INTO estoque(filial,produto,quantidade) VALUES(?,?,?)");
 //        operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET filial = CURRENT_TIMESTAMP WHERE produto = ?");
         operacaoBuscaF = conexao.prepareStatement("SELECT * FROM estoque WHERE filial=?");
-//        operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
+        operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
         operacaoExcluirFilial = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ?");
         operacaoCountFilial = conexao.prepareStatement("select count(produto) as qtdeFilial from LP3.ESTOQUE where produto = ?");
@@ -72,14 +72,16 @@ public class EstoqueDAO {
         operacaoDistribuir.setInt(1, estoque);
         operacaoDistribuir.setString(2, produto);
         operacaoDistribuir.executeUpdate();
+        operacaoDistribuir.close();
+        conexao.commit();
     }
     
-        public void desativarFilial(String filial, String produto, int estoque) throws SQLException{
-        operacaoDistribuir.clearParameters();
-        operacaoDistribuir.setInt(1, estoque);
-        operacaoDistribuir.setString(2, produto);
-        operacaoDistribuir.executeUpdate();
-    }
+        public void desativarFilial(String filial) throws SQLException{
+            operacaoDesativarFilial.clearParameters();
+            operacaoDesativarFilial.setString(1, filial);
+            operacaoDesativarFilial.executeUpdate();
+            conexao.commit();
+        }
     
 //    public void excluirDados(Estoque estoque) throws Exception {
 //            operacaoExcluir.clearParameters();
@@ -114,6 +116,25 @@ public class EstoqueDAO {
             estoque.setFilial(listaF.getString("filial"));
             estoque.setProduto(listaF.getString("produto"));
             estoque.setQtd(listaF.getInt("quantidade"));
+            estoq.add(estoque);
+        }
+        
+        return estoq;
+    }
+    
+        public List<Estoque> listarP(String produto) throws Exception{
+        operacaoBuscaP.clearParameters();
+        operacaoBuscaP.setString(1, produto);
+        ResultSet listaP = operacaoBuscaP.executeQuery();
+        
+        List<Estoque> estoq = new ArrayList<>();
+        
+        while (listaP.next()){
+            
+            Estoque estoque = new Estoque();
+            estoque.setFilial(listaP.getString("filial"));
+            estoque.setProduto(listaP.getString("produto"));
+            estoque.setQtd(listaP.getInt("quantidade"));
             estoq.add(estoque);
         }
         
