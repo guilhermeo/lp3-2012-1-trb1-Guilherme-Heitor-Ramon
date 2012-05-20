@@ -22,6 +22,7 @@ public class EstoqueDAO {
     private final PreparedStatement operacaoExcluirFilial;
     private final PreparedStatement operacaoCountFilial;
     private final PreparedStatement operacaoDistribuir;
+    private final PreparedStatement operacaoDesativarFilial;
     
     public EstoqueDAO() throws Exception{
         
@@ -33,9 +34,9 @@ public class EstoqueDAO {
 //        operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
         operacaoExcluirFilial = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ?");
-        operacaoCountFilial = conexao.prepareStatement("select count(filial) as qtdeFilial from LP3.ESTOQUE where filial = ?");
-        operacaoDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade+? where filial = ? and produto = ?");
-        
+        operacaoCountFilial = conexao.prepareStatement("select count(produto) as qtdeFilial from LP3.ESTOQUE where produto = ?");
+        operacaoDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade+? where produto = ?");
+        operacaoDesativarFilial = conexao.prepareStatement("update estoque set quantidade = 0 where filial = ?");
     }
     
     public void criar(Estoque estoque) throws Exception {
@@ -54,10 +55,10 @@ public class EstoqueDAO {
         operacaoExcluirFilial.executeUpdate();
     }
     
-    public int countFilial (String filial) throws SQLException{
+    public int countFilial (String produto) throws SQLException{
         int qtde = 0;
         operacaoCountFilial.clearParameters();
-        operacaoCountFilial.setString(1, filial);
+        operacaoCountFilial.setString(1, produto);
         ResultSet rs = operacaoCountFilial.executeQuery();
         while(rs.next()){
             qtde = rs.getInt("qtdeFilial");
@@ -68,8 +69,14 @@ public class EstoqueDAO {
     public void distribuirEstoque(String filial, String produto, int estoque) throws SQLException{
         operacaoDistribuir.clearParameters();
         operacaoDistribuir.setInt(1, estoque);
-        operacaoDistribuir.setString(2, filial);
-        operacaoDistribuir.setString(3, produto);
+        operacaoDistribuir.setString(2, produto);
+        operacaoDistribuir.executeUpdate();
+    }
+    
+        public void desativarFilial(String filial, String produto, int estoque) throws SQLException{
+        operacaoDistribuir.clearParameters();
+        operacaoDistribuir.setInt(1, estoque);
+        operacaoDistribuir.setString(2, produto);
         operacaoDistribuir.executeUpdate();
     }
     

@@ -227,15 +227,30 @@ public class BuscaFilial extends javax.swing.JFrame {
         int qtdeFilial = 0;
         
         String filial = modelo.getValueAt(tabela.getSelectedRow(), 0).toString();
+        String produto = modelo.getValueAt(tabela.getSelectedRow(), 1).toString();
         int qtde = Integer.parseInt(modelo.getValueAt(tabela.getSelectedRow(), 2).toString());
+        
         int divisao = 0;
         try {
-            qtdeFilial = DAO.countFilial(filial);
+            qtdeFilial = DAO.countFilial(produto);
             try {
                 divisao = qtde / (qtdeFilial - 1);
+                
+                List<Estoque> estoque = new ArrayList<>();
+                
+                estoque = DAO.listarF(filial);
+                for(int i = 0; i < estoque.size(); i++){
+                    if(estoque.get(i).getFilial().equals(filial)){
+                        
+                    }
+                    String novaF = estoque.get(i).getFilial();
+                    DAO.distribuirEstoque(novaF, produto, qtde);
+                }
+                
             }catch (Exception ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
                 if(divisao == 0){
-                    JOptionPane.showMessageDialog(null, "Filial excluida, porém não foi possível distribuir o estoque","Exclusão",JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Filial desativada, porém não foi possível distribuir o estoque","Exclusão",JOptionPane.WARNING_MESSAGE);
                 }
             }
             
