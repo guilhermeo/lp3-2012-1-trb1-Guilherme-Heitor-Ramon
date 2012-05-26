@@ -249,7 +249,7 @@ public class Principal extends javax.swing.JFrame {
     }
     
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        // TODO add your handling code here:
+        
         InsereFilialProduto frm = new InsereFilialProduto();
         frm.setVisible(true);
     }//GEN-LAST:event_btnNovoActionPerformed
@@ -265,21 +265,16 @@ public class Principal extends javax.swing.JFrame {
         
         String filial = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0).toString();
         String produto = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1).toString();
+        String qtde = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 2).toString();
         
         AlteraFilial f;
         try {
-            f = new AlteraFilial(filial, produto);
+            f = new AlteraFilial(filial, produto, qtde);
             f.setVisible(true);
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro ao abrir o formulario", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-//        
-//        DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
-//        String filial = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0);
-//        String produto = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1);
-//        
         
     }//GEN-LAST:event_btnAlterarActionPerformed
 

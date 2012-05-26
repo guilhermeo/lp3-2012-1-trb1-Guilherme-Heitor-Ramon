@@ -6,6 +6,7 @@ package principal;
 
 import Classes.Estoque;
 import database.EstoqueDAO;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,6 +24,7 @@ public class AlteraFilial extends javax.swing.JFrame {
     EstoqueDAO estoqueDao;
     String filial;
     String produto;
+    String qtde;
     
     /**
      * 
@@ -30,10 +32,11 @@ public class AlteraFilial extends javax.swing.JFrame {
      * @param produto produto vai ser pega pelo formulário Principal para ser feita a query UPDATE
      * @throws Exception 
      */
-    public AlteraFilial(String filial, String produto) throws Exception {
+    public AlteraFilial(String filial, String produto, String qtde) throws Exception {
         initComponents();
         this.filial = filial;
         this.produto = produto;
+        this.qtde = qtde;
         estoqueDao = new EstoqueDAO();
     }
 
@@ -87,6 +90,10 @@ public class AlteraFilial extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+
+        txtProduto.setEditable(false);
+
+        txtFilial.setEditable(false);
 
         jLabel3.setText("Qtde Estoque");
 
@@ -149,24 +156,21 @@ public class AlteraFilial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        
+        txtFilial.setText(filial);
+        txtProduto.setText(produto);
+        txtQtdeEstoque.setText(qtde);
     }//GEN-LAST:event_formWindowOpened
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
 
+       
+        int qtd = Integer.parseInt(txtQtdeEstoque.getText());
         try {
-            Estoque estoque = new Estoque();
-            estoque.setFilial(txtFilial.getText());
-            estoque.setProduto(txtProduto.getText());
-            estoque.setQtd(Integer.parseInt(txtQtdeEstoque.getText()));
-
-            estoqueDao.criar(estoque);
-        } catch (Exception ex) {
-            Logger.getLogger(InsereFilialProduto.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro na inserção", JOptionPane.ERROR_MESSAGE);
+            estoqueDao.atualizar(filial, produto,qtd);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlteraFilial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

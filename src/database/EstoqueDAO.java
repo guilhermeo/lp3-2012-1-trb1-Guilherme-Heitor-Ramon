@@ -32,7 +32,7 @@ public class EstoqueDAO {
         conexao = ConexaoJavaDB.getConnection();
         
         operacaoCreate = conexao.prepareStatement("INSERT INTO estoque(filial,produto,quantidade) VALUES(?,?,?)");
-        operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET filial = ?, produto = ? WHERE filial = ? AND produto = ?");
+        operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET quantidade = ? WHERE filial = ? AND produto = ?");
         operacaoBuscaF = conexao.prepareStatement("SELECT * FROM estoque WHERE filial=?");
         operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
@@ -44,12 +44,11 @@ public class EstoqueDAO {
         operacaoFilialPorProduto = conexao.prepareStatement("select filial from LP3.ESTOQUE where produto = ?");
     }
     
-    public void atualizar(String filialNova, String produtoNovo, String filialAntiga, String produtoAntigo) throws SQLException{
+    public void atualizar(String filialNova, String produtoNovo, int qtde) throws SQLException{
         operacaoAtualizar.clearParameters();
-        operacaoAtualizar.setString(1, filialNova);
-        operacaoAtualizar.setString(2, produtoNovo);
-        operacaoAtualizar.setString(3, filialAntiga);
-        operacaoAtualizar.setString(4, produtoAntigo);
+        operacaoAtualizar.setInt(1, qtde);
+        operacaoAtualizar.setString(2, filialNova);
+        operacaoAtualizar.setString(3, produtoNovo);
         
         operacaoAtualizar.executeUpdate();
     }
