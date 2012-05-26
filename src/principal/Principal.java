@@ -165,6 +165,11 @@ public class Principal extends javax.swing.JFrame {
         btnDesativarMaterial.setText("Desativar Filial");
 
         btnDistribuirEstoque.setText("Distribuir estoque");
+        btnDistribuirEstoque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDistribuirEstoqueActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -290,6 +295,20 @@ public class Principal extends javax.swing.JFrame {
         
 
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnDistribuirEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDistribuirEstoqueActionPerformed
+                       
+        DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
+        
+        String filial = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0).toString();
+        String produto = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1).toString();
+        String qtde = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 2).toString();
+
+        
+        DistribuirEstoque frm = new DistribuirEstoque(filial, produto, qtde);
+        frm.setVisible(true);
+        
+    }//GEN-LAST:event_btnDistribuirEstoqueActionPerformed
 
     /**
      * @param args the command line arguments

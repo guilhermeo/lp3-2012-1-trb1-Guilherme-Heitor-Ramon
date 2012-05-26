@@ -37,8 +37,8 @@ public class EstoqueDAO {
         operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
         operacaoExcluirFilial = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ?");
-        operacaoCountFilial = conexao.prepareStatement("select count(produto) as qtdeFilial from LP3.ESTOQUE where produto = ?");
-        operacaoDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade+? where produto = ?");
+        operacaoCountFilial = conexao.prepareStatement("select count(filial) as qtdeFilial from LP3.ESTOQUE where produto = ?");
+        operacaoDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade+? where produto = ? AND filial <> ?");
         operacaoDesativarFilial = conexao.prepareStatement("update estoque set quantidade = 0 where filial = ?");
         operacaoDistinctProduto = conexao.prepareStatement("select distinct produto from LP3.ESTOQUE");
         operacaoFilialPorProduto = conexao.prepareStatement("select filial from LP3.ESTOQUE where produto = ?");
@@ -69,10 +69,10 @@ public class EstoqueDAO {
         operacaoExcluirFilial.executeUpdate();
     }
     
-    public int countFilial (String produto) throws SQLException{
+    public int countFilial (String filial) throws SQLException{
         int qtde = 0;
         operacaoCountFilial.clearParameters();
-        operacaoCountFilial.setString(1, produto);
+        operacaoCountFilial.setString(1, filial);
         ResultSet rs = operacaoCountFilial.executeQuery();
         while(rs.next()){
             qtde = rs.getInt("qtdeFilial");
@@ -111,10 +111,14 @@ public class EstoqueDAO {
             return estoq;
     }
     
-    public void distribuirEstoque(String filial, String produto, int estoque) throws SQLException{
+    public void distribuirEstoque(String produto, int estoque, String filialOrigem) throws SQLException{
+        
+//        ("update estoque set quantidade = quantidade+? where produto = ? AND filial <> ?");
+        
         operacaoDistribuir.clearParameters();
         operacaoDistribuir.setInt(1, estoque);
         operacaoDistribuir.setString(2, produto);
+        operacaoDistribuir.setString(3, filialOrigem);
         operacaoDistribuir.executeUpdate();
         operacaoDistribuir.close();
         conexao.commit();
