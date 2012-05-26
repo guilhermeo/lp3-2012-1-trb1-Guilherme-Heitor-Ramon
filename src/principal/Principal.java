@@ -24,6 +24,15 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     EstoqueDAO estoqueDao;
+    Integer valor = 0;
+
+    public Integer getValor() {
+        return valor;
+    }
+
+    public void setValor(Integer valor) {
+        this.valor = valor;
+    }
     public Principal() {
         try {
             estoqueDao = new EstoqueDAO();
@@ -210,11 +219,11 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-488)/2, (screenSize.height-469)/2, 488, 469);
+        setBounds((screenSize.width-488)/2, (screenSize.height-423)/2, 488, 423);
     }// </editor-fold>//GEN-END:initComponents
 
     private void preencheTabela(){
@@ -252,12 +261,25 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         
-        
-        
         DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
-        String filial = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0);
-        String produto = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1);
         
+        String filial = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0).toString();
+        String produto = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1).toString();
+        
+        AlteraFilial f;
+        try {
+            f = new AlteraFilial(filial, produto);
+            f.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+//        
+//        DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
+//        String filial = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0);
+//        String produto = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1);
+//        
         
     }//GEN-LAST:event_btnAlterarActionPerformed
 

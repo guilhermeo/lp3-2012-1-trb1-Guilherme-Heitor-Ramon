@@ -16,7 +16,7 @@ public class EstoqueDAO {
     
     private Connection conexao;
     private final PreparedStatement operacaoCreate;
-//    private final PreparedStatement operacaoAtualizar;
+    private final PreparedStatement operacaoAtualizar;
     private final PreparedStatement operacaoBuscaF;
     private final PreparedStatement operacaoBuscaP;
     private final PreparedStatement operacaoListar;
@@ -32,7 +32,7 @@ public class EstoqueDAO {
         conexao = ConexaoJavaDB.getConnection();
         
         operacaoCreate = conexao.prepareStatement("INSERT INTO estoque(filial,produto,quantidade) VALUES(?,?,?)");
-//        operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET filial = CURRENT_TIMESTAMP WHERE produto = ?");
+        operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET filial = ?, produto = ? WHERE filial = ? AND produto = ?");
         operacaoBuscaF = conexao.prepareStatement("SELECT * FROM estoque WHERE filial=?");
         operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
@@ -42,6 +42,16 @@ public class EstoqueDAO {
         operacaoDesativarFilial = conexao.prepareStatement("update estoque set quantidade = 0 where filial = ?");
         operacaoDistinctProduto = conexao.prepareStatement("select distinct produto from LP3.ESTOQUE");
         operacaoFilialPorProduto = conexao.prepareStatement("select filial from LP3.ESTOQUE where produto = ?");
+    }
+    
+    public void atualizar(String filialNova, String produtoNovo, String filialAntiga, String produtoAntigo) throws SQLException{
+        operacaoAtualizar.clearParameters();
+        operacaoAtualizar.setString(1, filialNova);
+        operacaoAtualizar.setString(2, produtoNovo);
+        operacaoAtualizar.setString(3, filialAntiga);
+        operacaoAtualizar.setString(4, produtoAntigo);
+        
+        operacaoAtualizar.executeUpdate();
     }
     
     public void criar(Estoque estoque) throws Exception {

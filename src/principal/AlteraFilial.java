@@ -12,22 +12,32 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author heitor-note
+ * @author WorkStation
  */
-public class InsereFilialProduto extends javax.swing.JFrame {
+public class AlteraFilial extends javax.swing.JFrame {
 
     /**
-     * Creates new form AlteraExcluiFilial
+     * Creates new form Busca
      */
+    
     EstoqueDAO estoqueDao;
-    public InsereFilialProduto() {
-        try {
-            estoqueDao = new EstoqueDAO();
-        } catch (Exception ex) {
-            Logger.getLogger(InsereFilialProduto.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro de conexão com o BD",JOptionPane.ERROR_MESSAGE);
-        }
-        
+    String filial;
+    String produto;
+    
+    /**
+     * 
+     * @param filial filial vai ser pega pelo formulário Principal para ser feita a query UPDATE
+     * @param produto produto vai ser pega pelo formulário Principal para ser feita a query UPDATE
+     * @throws Exception 
+     */
+    public AlteraFilial(String filial, String produto) throws Exception {
+        initComponents();
+        this.filial = filial;
+        this.produto = produto;
+        estoqueDao = new EstoqueDAO();
+    }
+
+    private AlteraFilial() {
         initComponents();
     }
 
@@ -40,23 +50,22 @@ public class InsereFilialProduto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        txtFilial = new javax.swing.JTextField();
-        txtProduto = new javax.swing.JTextField();
-        txtQtdeEstoque = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        txtQtdeEstoque = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        txtProduto = new javax.swing.JTextField();
+        txtFilial = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setText("Filial");
-
-        jLabel2.setText("Produto");
-
-        jLabel3.setText("Qtde Estoque");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -79,12 +88,18 @@ public class InsereFilialProduto extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Qtde Estoque");
+
+        jLabel2.setText("Produto");
+
+        jLabel1.setText("Filial");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 145, Short.MAX_VALUE)
+                .addGap(0, 125, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCancelar)
@@ -126,20 +141,33 @@ public class InsereFilialProduto extends javax.swing.JFrame {
                     .addComponent(btnSalvar)
                     .addComponent(btnCancelar)
                     .addComponent(jButton3))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-407)/2, (screenSize.height-211)/2, 407, 211);
+        setBounds((screenSize.width-387)/2, (screenSize.height-309)/2, 387, 309);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         
-        this.dispose();
-        Principal frm = new Principal();
-        frm.setVisible(true);
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+
+        try {
+            Estoque estoque = new Estoque();
+            estoque.setFilial(txtFilial.getText());
+            estoque.setProduto(txtProduto.getText());
+            estoque.setQtd(Integer.parseInt(txtQtdeEstoque.getText()));
+
+            estoqueDao.criar(estoque);
+        } catch (Exception ex) {
+            Logger.getLogger(InsereFilialProduto.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro na inserção", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         txtFilial.setText(null);
@@ -147,21 +175,13 @@ public class InsereFilialProduto extends javax.swing.JFrame {
         txtQtdeEstoque.setText(null);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        try {
-                Estoque estoque = new Estoque();
-                estoque.setFilial(txtFilial.getText());
-                estoque.setProduto(txtProduto.getText());
-                estoque.setQtd(Integer.parseInt(txtQtdeEstoque.getText()));
-        
-                estoqueDao.criar(estoque);
-        } catch (Exception ex) {
-            Logger.getLogger(InsereFilialProduto.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro na inserção",JOptionPane.ERROR_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_btnSalvarActionPerformed
+        this.dispose();
+        Principal frm = new Principal();
+        frm.setVisible(true);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,13 +204,13 @@ public class InsereFilialProduto extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InsereFilialProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AlteraFilial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InsereFilialProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AlteraFilial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InsereFilialProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AlteraFilial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InsereFilialProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AlteraFilial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -200,7 +220,11 @@ public class InsereFilialProduto extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new InsereFilialProduto().setVisible(true);
+                try {
+                    new AlteraFilial().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(AlteraFilial.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
