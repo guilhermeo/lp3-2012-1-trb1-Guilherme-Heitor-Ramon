@@ -255,6 +255,7 @@ public class DesativarFilial extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         DefaultTableModel tabela = (DefaultTableModel) filiaisDataGrid.getModel();
         tabela.getDataVector().removeAllElements();
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

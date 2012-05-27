@@ -326,6 +326,7 @@ public class Principal extends javax.swing.JFrame {
         String filial = (String) tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0);
         try {
             estoqueDao.excluirFilial(filial);
+            preencheTabela();
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
