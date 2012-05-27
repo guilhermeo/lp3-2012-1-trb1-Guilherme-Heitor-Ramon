@@ -65,6 +65,7 @@ public class TransporteEstoque extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtQuantidade = new javax.swing.JTextField();
         txtProduto = new javax.swing.JTextField();
+        btnFechar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -118,6 +119,13 @@ public class TransporteEstoque extends javax.swing.JFrame {
 
         txtProduto.setEditable(false);
 
+        btnFechar.setText("Fechar");
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -145,7 +153,10 @@ public class TransporteEstoque extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCarregaProdutos)))))
+                                .addComponent(btnCarregaProdutos))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnFechar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -168,7 +179,9 @@ public class TransporteEstoque extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirma))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(btnFechar)
+                .addContainerGap())
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -223,6 +236,13 @@ public class TransporteEstoque extends javax.swing.JFrame {
         frm.setFocusable(true);
     }//GEN-LAST:event_formWindowClosed
 
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        Principal frm = new Principal();
+        frm.setFocusable(true);
+    }//GEN-LAST:event_btnFecharActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -267,6 +287,7 @@ public class TransporteEstoque extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCarregaProdutos;
     private javax.swing.JButton btnConfirma;
+    private javax.swing.JButton btnFechar;
     private javax.swing.JTable filiaisDataGrid;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

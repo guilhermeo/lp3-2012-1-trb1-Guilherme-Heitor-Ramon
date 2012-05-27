@@ -45,8 +45,8 @@ public class EstoqueDAO {
     public void receberProduto(int qtde, String filial, String produto) throws SQLException{
         operacaoTransporte.clearParameters();
         operacaoTransporte.setInt(1, qtde);
-        operacaoTransporte.setString(2, filial);
-        operacaoTransporte.setString(3, produto);
+        operacaoTransporte.setString(2, produto);
+        operacaoTransporte.setString(3, filial);
         
         operacaoTransporte.executeUpdate();
         conexao.commit();

@@ -186,7 +186,7 @@ public class AlteraFilial extends javax.swing.JFrame {
 
         this.dispose();
         Principal frm = new Principal();
-        frm.setVisible(true);
+        frm.setFocusable(true);
 
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -69,6 +69,8 @@ public class DesativarFilial extends javax.swing.JFrame {
         txtProdutoDesativado = new javax.swing.JTextField();
         txtQuantidadeDesativada = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        btnFechar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -124,6 +126,20 @@ public class DesativarFilial extends javax.swing.JFrame {
 
         jLabel3.setText("Quantidade");
 
+        btnFechar.setText("Fechar");
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,7 +167,12 @@ public class DesativarFilial extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtQuantidadeDesativada, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCarregaProdutos)))))
+                                .addComponent(btnCarregaProdutos))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnFechar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -174,11 +195,15 @@ public class DesativarFilial extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConfirma))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFechar)
+                    .addComponent(btnCancelar))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-437)/2, (screenSize.height-291)/2, 437, 291);
+        setBounds((screenSize.width-437)/2, (screenSize.height-343)/2, 437, 343);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCarregaProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarregaProdutosActionPerformed
@@ -220,6 +245,17 @@ public class DesativarFilial extends javax.swing.JFrame {
         Principal frm = new Principal();
         frm.setFocusable(true);
     }//GEN-LAST:event_formWindowClosed
+
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+
+        Principal frm = new Principal();
+        frm.setFocusable(true);
+    }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        DefaultTableModel tabela = (DefaultTableModel) filiaisDataGrid.getModel();
+        tabela.getDataVector().removeAllElements();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,8 +299,10 @@ public class DesativarFilial extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCarregaProdutos;
     private javax.swing.JButton btnConfirma;
+    private javax.swing.JButton btnFechar;
     private javax.swing.JTable filiaisDataGrid;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

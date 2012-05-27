@@ -201,7 +201,7 @@ public class DistribuirEstoque extends javax.swing.JFrame {
 
         this.dispose();
         Principal frm = new Principal();
-        frm.setVisible(true);
+        frm.setFocusable(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
