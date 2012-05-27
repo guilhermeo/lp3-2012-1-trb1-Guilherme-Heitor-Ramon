@@ -51,6 +51,11 @@ public class InsereFilialProduto extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("Filial");
 
@@ -162,6 +167,12 @@ public class InsereFilialProduto extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+        Principal frm = new Principal();
+        frm.setFocusable(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

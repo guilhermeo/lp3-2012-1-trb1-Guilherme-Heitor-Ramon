@@ -65,6 +65,9 @@ public class AlteraFilial extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -148,11 +151,11 @@ public class AlteraFilial extends javax.swing.JFrame {
                     .addComponent(btnSalvar)
                     .addComponent(btnCancelar)
                     .addComponent(jButton3))
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-387)/2, (screenSize.height-309)/2, 387, 309);
+        setBounds((screenSize.width-387)/2, (screenSize.height-222)/2, 387, 222);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -186,6 +189,11 @@ public class AlteraFilial extends javax.swing.JFrame {
         frm.setVisible(true);
 
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        Principal frm = new Principal();
+        frm.setFocusable(true);
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

@@ -162,11 +162,14 @@ public class DistribuirEstoque extends javax.swing.JFrame {
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
-        pack();
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds((screenSize.width-410)/2, (screenSize.height-220)/2, 410, 220);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
+
+        Principal frm = new Principal();
+        frm.setFocusable(true);
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -183,6 +186,7 @@ public class DistribuirEstoque extends javax.swing.JFrame {
                 int qtdeDist = Integer.parseInt(txtQtdeEstoque.getText()) / countFilial;
                 
                 estoqueDao.distribuirEstoque(produto, qtdeDist, filial);
+                estoqueDao.updateEstoque(Integer.parseInt(txtQtdeEstoque.getText()), filial, produto);
             }
             
             

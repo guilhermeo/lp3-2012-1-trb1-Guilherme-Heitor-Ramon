@@ -17,15 +17,14 @@ public class EstoqueDAO {
     private Connection conexao;
     private final PreparedStatement operacaoCreate;
     private final PreparedStatement operacaoAtualizar;
-    private final PreparedStatement operacaoBuscaF;
-    private final PreparedStatement operacaoBuscaP;
     private final PreparedStatement operacaoListar;
     private final PreparedStatement operacaoExcluirFilial;
     private final PreparedStatement operacaoCountFilial;
     private final PreparedStatement operacaoDistribuir;
     private final PreparedStatement operacaoDesativarFilial;
-    private final PreparedStatement operacaoDistinctProduto;
     private final PreparedStatement operacaoFilialPorProduto;
+    private final PreparedStatement operacaoUpdateDistribuir;
+    private final PreparedStatement operacaoTransporte;
     
     public EstoqueDAO() throws Exception{
         
@@ -33,24 +32,34 @@ public class EstoqueDAO {
         
         operacaoCreate = conexao.prepareStatement("INSERT INTO estoque(filial,produto,quantidade) VALUES(?,?,?)");
         operacaoAtualizar = conexao.prepareStatement("UPDATE estoque SET quantidade = ? WHERE filial = ? AND produto = ?");
-        operacaoBuscaF = conexao.prepareStatement("SELECT * FROM estoque WHERE filial=?");
-        operacaoBuscaP = conexao.prepareStatement("SELECT * FROM estoque WHERE produto=?");
-        operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
+        operacaoListar = conexao.prepareStatement("SELECT * FROM estoque order by produto");
         operacaoExcluirFilial = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ?");
         operacaoCountFilial = conexao.prepareStatement("select count(filial) as qtdeFilial from LP3.ESTOQUE where produto = ?");
         operacaoDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade+? where produto = ? AND filial <> ?");
+        operacaoUpdateDistribuir = conexao.prepareStatement("update estoque set quantidade = quantidade - ? where filial = ? and produto = ?");
         operacaoDesativarFilial = conexao.prepareStatement("update estoque set quantidade = 0 where filial = ?");
-        operacaoDistinctProduto = conexao.prepareStatement("select distinct produto from LP3.ESTOQUE");
-        operacaoFilialPorProduto = conexao.prepareStatement("select filial from LP3.ESTOQUE where produto = ?");
+        operacaoFilialPorProduto = conexao.prepareStatement("select filial from LP3.ESTOQUE where produto = ? and filial <> ?");
+        operacaoTransporte = conexao.prepareStatement("update estoque set quantidade = quantidade+? where produto = ? AND filial = ?");
     }
     
-    public void atualizar(String filialNova, String produtoNovo, int qtde) throws SQLException{
+    public void receberProduto(int qtde, String filial, String produto) throws SQLException{
+        operacaoTransporte.clearParameters();
+        operacaoTransporte.setInt(1, qtde);
+        operacaoTransporte.setString(2, filial);
+        operacaoTransporte.setString(3, produto);
+        
+        operacaoTransporte.executeUpdate();
+        conexao.commit();
+    }
+    
+    public void atualizar(String filial, String produto, int qtde) throws SQLException{
         operacaoAtualizar.clearParameters();
         operacaoAtualizar.setInt(1, qtde);
-        operacaoAtualizar.setString(2, filialNova);
-        operacaoAtualizar.setString(3, produtoNovo);
+        operacaoAtualizar.setString(2, filial);
+        operacaoAtualizar.setString(3, produto);
         
         operacaoAtualizar.executeUpdate();
+        conexao.commit();
     }
     
     public void criar(Estoque estoque) throws Exception {
@@ -80,24 +89,11 @@ public class EstoqueDAO {
         return qtde;
     }
     
-    public List<Estoque> selectDistinctProduto() throws SQLException{
-        ResultSet estq = operacaoDistinctProduto.executeQuery();
-            List<Estoque> estoq = new ArrayList<>();
-            while (estq.next()) {
-                Estoque estoque = new Estoque();
-                estoque.setFilial(null);
-                estoque.setProduto(estq.getString("produto"));
-                estoque.setQtd(0);
-
-                estoq.add(estoque);
-            }
-            return estoq;
-    }
-    
-        public List<Estoque> selectFilialPorProduto(String produto) throws SQLException{
+        public List<Estoque> selectFilialPorProduto(String produto, String filial) throws SQLException{
             operacaoFilialPorProduto.clearParameters();
             operacaoFilialPorProduto.setString(1, produto);
-            
+            operacaoFilialPorProduto.setString(2, filial);
+                        
             ResultSet estq = operacaoFilialPorProduto.executeQuery();
             List<Estoque> estoq = new ArrayList<>();
             while (estq.next()) {
@@ -124,19 +120,25 @@ public class EstoqueDAO {
         conexao.commit();
     }
     
-        public void desativarFilial(String filial) throws SQLException{
-            operacaoDesativarFilial.clearParameters();
-            operacaoDesativarFilial.setString(1, filial);
-            operacaoDesativarFilial.executeUpdate();
-            conexao.commit();
-        }
+        public void updateEstoque(int estoque, String filial, String produto) throws SQLException{
+        
+        //update estoque set quantidade = quantidade - ? where filial = ? and produto = ?
+        operacaoUpdateDistribuir.clearParameters();
+        operacaoUpdateDistribuir.setInt(1, estoque);
+        operacaoUpdateDistribuir.setString(2, filial);
+        operacaoUpdateDistribuir.setString(3, produto);
+        operacaoUpdateDistribuir.executeUpdate();
+        operacaoUpdateDistribuir.close();
+        conexao.commit();
+    }
     
-//    public void excluirDados(Estoque estoque) throws Exception {
-//            operacaoExcluir.clearParameters();
-//            operacaoExcluir.setString(1, estoque.getFilial());
-//            operacaoExcluir.executeUpdate();        
-//    }
-//    
+    public void desativarFilial(String filial) throws SQLException{
+        operacaoDesativarFilial.clearParameters();
+        operacaoDesativarFilial.setString(1, filial);
+        operacaoDesativarFilial.executeUpdate();
+        conexao.commit();
+    }
+     
     public List<Estoque> listAll() throws Exception {
             ResultSet estq = operacaoListar.executeQuery();
             List<Estoque> estoq = new ArrayList<>();
@@ -151,51 +153,5 @@ public class EstoqueDAO {
             return estoq;
     }
     
-    public List<Estoque> listarF(String filial) throws Exception{
-        operacaoBuscaF.clearParameters();
-        operacaoBuscaF.setString(1, filial);
-        ResultSet listaF = operacaoBuscaF.executeQuery();
-        
-        List<Estoque> estoq = new ArrayList<>();
-        
-        while (listaF.next()){
-            
-            Estoque estoque = new Estoque();
-            estoque.setFilial(listaF.getString("filial"));
-            estoque.setProduto(listaF.getString("produto"));
-            estoque.setQtd(listaF.getInt("quantidade"));
-            estoq.add(estoque);
-        }
-        
-        return estoq;
-    }
-    
-        public List<Estoque> listarP(String produto) throws Exception{
-        operacaoBuscaP.clearParameters();
-        operacaoBuscaP.setString(1, produto);
-        ResultSet listaP = operacaoBuscaP.executeQuery();
-        
-        List<Estoque> estoq = new ArrayList<>();
-        
-        while (listaP.next()){
-            
-            Estoque estoque = new Estoque();
-            estoque.setFilial(listaP.getString("filial"));
-            estoque.setProduto(listaP.getString("produto"));
-            estoque.setQtd(listaP.getInt("quantidade"));
-            estoq.add(estoque);
-        }
-        
-        return estoq;
-    }
-    
-//    public ResultSet listarP(String produto) throws Exception{
-//    
-//            Statement statement = conexao.createStatement();
-//            String qry = "SELECT * FROM estoque WHERE produto=" + produto;
-//            ResultSet rs = statement.executeQuery(qry);
-//    
-//            return rs;
-//    }
     
 }

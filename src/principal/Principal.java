@@ -82,9 +82,21 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
+            }
+        });
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
             }
         });
 
@@ -161,8 +173,18 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Movimentações"));
 
         btnTransporteMaterial.setText("Transporte Mat.");
+        btnTransporteMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransporteMaterialActionPerformed(evt);
+            }
+        });
 
         btnDesativarMaterial.setText("Desativar Filial");
+        btnDesativarMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesativarMaterialActionPerformed(evt);
+            }
+        });
 
         btnDistribuirEstoque.setText("Distribuir estoque");
         btnDistribuirEstoque.addActionListener(new java.awt.event.ActionListener() {
@@ -309,6 +331,36 @@ public class Principal extends javax.swing.JFrame {
         frm.setVisible(true);
         
     }//GEN-LAST:event_btnDistribuirEstoqueActionPerformed
+
+    private void btnDesativarMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesativarMaterialActionPerformed
+        
+        DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
+        String filial = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0).toString();
+        String produto = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1).toString();
+        String qtde = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 2).toString();
+        
+        DesativarFilial frm = new DesativarFilial(filial, produto, qtde);
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnDesativarMaterialActionPerformed
+
+    private void btnTransporteMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransporteMaterialActionPerformed
+                DefaultTableModel tabela = (DefaultTableModel) estoqueDataGrid.getModel();
+        String filial = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 0).toString();
+        String produto = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 1).toString();
+        String qtde = tabela.getValueAt(estoqueDataGrid.getSelectedRow(), 2).toString();
+        
+        TransporteEstoque frm = new TransporteEstoque(filial, produto, qtde);
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnTransporteMaterialActionPerformed
+
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+
+    }//GEN-LAST:event_formFocusGained
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+
+        preencheTabela();
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments
